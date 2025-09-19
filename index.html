@@ -19,6 +19,8 @@
             <div class="nav-links">
                 <a href="#calculator" class="nav-link">EPH 計算</a>
                 <a href="#interval" class="nav-link">間歇訓練</a>
+                <a href="#training-pace" class="nav-link">訓練配速</a>
+                <a href="#plan-generator" class="nav-link">課表產生</a>
                 <a href="#gap" class="nav-link">GAP 計算</a>
                 <a href="#treadmill" class="nav-link">跑步機</a>
                 <a href="#race" class="nav-link">賽事預估</a>
@@ -109,7 +111,8 @@
 
                     <button id="interval-calculate" class="btn btn-primary">解析間歇訓練</button>
                 </div>
-                <div class="results-pane"><div id="interval-results-list" class="metrics-list"></div>
+                <div class="results-pane">
+                    <div id="interval-results-list" class="metrics-list"></div>
                     <div class="metrics-list" style="margin-top: 20px;">
                         <div class="metric-item">
                             <span class="metric-number">總</span>
@@ -126,6 +129,7 @@
                             </div>
                         </div>
                     </div>
+                    <button id="copy-interval-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製結果</button>
                 </div>
             </div>
         </section>
@@ -254,6 +258,7 @@
                             <div class="metric-item"><div class="metric-content"><h3 class="metric-name">恢復跑 (40min)</h3><p class="metric-value" id="tpc-lsd-recovery">0:00/km</p></div></div>
                         </div>
                     </div>
+                    <button id="copy-tpc-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製結果</button>
                 </div>
             </div>
         </section>
@@ -385,6 +390,7 @@
                             </div>
                         </div>
                     </div>
+                    <button id="copy-plan-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製課表</button>
                 </div>
             </div>
         </section>
@@ -507,6 +513,6 @@
     <!-- Hidden element for PNG export -->
     <div id="card-exporter-wrapper" class="card-exporter-hidden"><div id="card-exporter-content" class="results-pane"></div></div>
 
-    <script src="dist/bundle.js" defer></script>
+    <script src="bundle.js" defer></script>
 </body>
 </html>

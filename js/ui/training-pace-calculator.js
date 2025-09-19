@@ -50,6 +50,9 @@ export class TrainingPaceCalculator {
         this.lsdDistInput = document.getElementById('tpc-lsd-dist');
         this.lsdPaceOutput = document.getElementById('tpc-lsd-pace');
         this.lsdRecoveryOutput = document.getElementById('tpc-lsd-recovery');
+
+        // Copy button
+        this.copyBtn = document.getElementById('copy-tpc-results');
     }
 
     addEventListeners() {
@@ -60,6 +63,38 @@ export class TrainingPaceCalculator {
         // Recalculate on input change for immediate feedback
         this.intervalDistInput.addEventListener('input', () => this.calculateAndDisplay());
         this.lsdDistInput.addEventListener('input', () => this.calculateAndDisplay());
+
+        if(this.copyBtn) this.copyBtn.addEventListener('click', () => this.copyResults());
+    }
+
+    copyResults() {
+        if (this.basePaceOutput.textContent === '0:00/km') {
+            alert('沒有結果可以複製。');
+            return;
+        }
+
+        const textToCopy = `
+訓練配速計算結果：
+- 基準配速: ${this.basePaceOutput.textContent}
+
+間歇跑 (Interval)
+- 趟數距離: ${this.intervalDistInput.value || 'N/A'} m
+- 趟數: ${this.intervalRepsInput.value || 'N/A'}
+- 建議配速: ${this.intervalPaceOutput.textContent}
+- 恢復跑: ${this.intervalRecoveryOutput.textContent}
+
+長距離慢跑 (LSD)
+- LSD 距離: ${this.lsdDistInput.value || 'N/A'} km
+- 建議配速: ${this.lsdPaceOutput.textContent}
+- 恢復跑: ${this.lsdRecoveryOutput.textContent}
+        `.trim().replace(/^ +/gm, ''); // trim and remove leading spaces
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('結果已複製到剪貼簿！');
+        }).catch(err => {
+            console.error('無法複製文字: ', err);
+            alert('複製失敗，請檢查瀏覽器權限。');
+        });
     }
 
     toggleInputType(type) {

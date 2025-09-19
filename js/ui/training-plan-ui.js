@@ -50,6 +50,9 @@ export class TrainingPlanUI {
         this.resMainPace = document.getElementById('plan-res-main-pace');
         this.resCooldown = document.getElementById('plan-res-cooldown');
         this.resCooldownPace = document.getElementById('plan-res-cooldown-pace');
+
+        // Copy Button
+        this.copyBtn = document.getElementById('copy-plan-results');
     }
 
     addEventListeners() {
@@ -58,6 +61,34 @@ export class TrainingPlanUI {
         this.warmupTimeBtn.addEventListener('click', () => this.toggleWarmupInput('time'));
         this.warmupDistBtn.addEventListener('click', () => this.toggleWarmupInput('dist'));
         this.generateBtn.addEventListener('click', () => this.calculateAndDisplay());
+        if(this.copyBtn) this.copyBtn.addEventListener('click', () => this.copyResults());
+    }
+
+    copyResults() {
+        if (this.resWarmup.textContent === '--') {
+            alert('沒有課表可以複製。');
+            return;
+        }
+
+        const textToCopy = `
+TrailSync 課表建議：
+
+- 熱身: ${this.resWarmup.textContent}
+  ${this.resWarmupPace.textContent}
+
+- 主課表: ${this.resMainTitle.textContent}
+  ${this.resMainPace.textContent}
+
+- 緩和: ${this.resCooldown.textContent}
+  ${this.resCooldownPace.textContent}
+        `.trim().replace(/^ +/gm, '');
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('課表已複製到剪貼簿！');
+        }).catch(err => {
+            console.error('無法複製文字: ', err);
+            alert('複製失敗，請檢查瀏覽器權限。');
+        });
     }
 
     toggleMode(mode) {

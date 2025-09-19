@@ -72,6 +72,7 @@ class TrailSyncApp {
         this.intervalTargetPaceMin = document.getElementById('interval-target-pace-min');
         this.intervalTargetPaceSec = document.getElementById('interval-target-pace-sec');
         this.intervalPaceReps = document.getElementById('interval-pace-reps');
+        this.copyIntervalBtn = document.getElementById('copy-interval-results');
 
         this.gapPaceInput = document.getElementById('gap-pace');
         this.gapGradeInput = document.getElementById('gap-grade');
@@ -149,6 +150,8 @@ class TrailSyncApp {
         this.clearIntervalSetsBtn.addEventListener('click', () => this.clearIntervalSets());
         this.reverseTreadmillConvertBtn.addEventListener('click', () => this.handleReverseTreadmillConversion());
         this.calculateTrainingTimeBtn.addEventListener('click', () => this.handleTrainingTimeCalculation());
+
+        if(this.copyIntervalBtn) this.copyIntervalBtn.addEventListener('click', () => this.handleCopyIntervalResults());
 
         // Advanced Prediction Listeners
         this.addAidStationBtn.addEventListener('click', () => this.handleAddAidStation());
@@ -770,6 +773,32 @@ class TrailSyncApp {
             clearDebriefs();
             this.loadHistory();
         }
+    }
+
+    handleCopyIntervalResults() {
+        const resultsList = this.intervalResultsList;
+        if (resultsList.children.length === 0) {
+            alert('沒有結果可以複製。');
+            return;
+        }
+
+        let textToCopy = '間歇訓練配速解析結果：\n';
+        resultsList.querySelectorAll('.metric-item').forEach(item => {
+            const title = item.querySelector('.metric-name').textContent.trim();
+            const value = item.querySelector('.metric-value').textContent.trim();
+            textToCopy += `- ${title}: ${value}\n`;
+        });
+
+        const totalDist = this.intervalTotalDistanceDisplay.textContent;
+        const totalTime = this.intervalTotalTimeDisplay.textContent;
+        textToCopy += `\n總距離: ${totalDist}\n總時間: ${totalTime}`;
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('結果已複製到剪貼簿！');
+        }).catch(err => {
+            console.error('無法複製文字: ', err);
+            alert('複製失敗，請檢查瀏覽器權限。');
+        });
     }
 }
 
