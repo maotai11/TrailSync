@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrailSync | 訓練數據美學</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/enhancements.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="main-nav container">
+            <a href="#" class="logo">TrailSync</a>
+            <div class="nav-links">
+                <a href="#calculator" class="nav-link">EPH 計算</a>
+                <a href="#interval" class="nav-link">間歇訓練</a>
+                <a href="#gap" class="nav-link">GAP 計算</a>
+                <a href="#treadmill" class="nav-link">跑步機</a>
+                <a href="#race" class="nav-link">賽事預估</a>
+                <a href="#debrief" class="nav-link">賽後復盤</a>
+                <a href="#gear" class="nav-link">我的裝備</a>
+                <a href="#history" class="nav-link">歷史數據</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- Section 1: EPH Calculator -->
+        <section id="calculator" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">等效配速<br>計算引擎</h2><p class="section-subtitle">基於距離、爬升與地形的綜合表現評估。</p></div>
+                <div class="form-pane">
+                    <div class="form-group"><label for="route-name" class="form-label">路線名稱 (選填)</label><input type="text" id="route-name" class="form-control" placeholder="例如: 陽明山東段縱走"></div>
+                    <div class="form-group"><label for="distance" class="form-label">距離 (公里)</label><input type="number" id="distance" class="form-control" placeholder="例如: 10.5"></div>
+                    <div class="form-group"><label for="elevation" class="form-label">總爬升 (公尺)</label><input type="number" id="elevation" class="form-control" placeholder="例如: 500"></div>
+                    <div class="form-group"><label for="target-hours" class="form-label">目標完賽時間</label><div class="time-input-group"><input type="number" id="target-hours" class="form-control time-input" placeholder="時"><input type="number" id="target-minutes" class="form-control time-input" placeholder="分"><input type="number" id="target-seconds" class="form-control time-input" placeholder="秒"></div></div>
+                    <div class="form-group"><label for="route-type" class="form-label">地形複雜度</label><select id="route-type" class="form-control form-select"><option value="road">公路 (平坦)</option><option value="fire_trail" selected>防火道 (一般)</option><option value="technical">技術性路徑</option><option value="alpine">高山地形</option></select></div>
+                    <div class="form-group"><label for="altitude" class="form-label">平均海拔 (公尺)</label><input type="number" id="altitude" class="form-control" placeholder="例如: 1500"></div>
+                    <div class="form-group"><label for="user-t-pace" class="form-label">您的閾值配速 (T-Pace, 分鐘/公里)</label><input type="number" id="user-t-pace" class="form-control" placeholder="例如: 5.0 (5分/公里)"></div>
+                    <div class="form-group"><input type="checkbox" id="ultra-race-checkbox" class="form-control" style="width: auto; margin-right: 0.5rem;"><label for="ultra-race-checkbox" class="form-label" style="display: inline;">超長距離賽事 (啟用非線性疲勞模型)</label></div>
+                    <button id="calculate-btn" class="btn btn-primary">開始計算</button>
+                </div>
+                <div class="results-pane" id="results-pane-onpage">
+                    <div class="metrics-list">
+                        <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">距離</h3><p class="metric-value" id="res-distance">0.0 km</p></div></div>
+                        <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">總爬升</h3><p class="metric-value" id="res-elevation">0 m</p></div></div>
+                        <div class="metric-item"><span class="metric-number">03</span><div class="metric-content"><h3 class="metric-name">用時</h3><p class="metric-value" id="res-time">00:00:00</p></div></div>
+                        <div class="metric-item"><span class="metric-number">04</span><div class="metric-content"><h3 class="metric-name" data-tooltip="Equivalent Pace per Hour">EPH</h3><p class="metric-value" id="eph">0.0</p></div></div>
+                    </div>
+                </div>
+                <div class="action-pane">
+                    <div class="form-group">
+                        <label for="run-shoe-selector" class="form-label">本次使用跑鞋</label>
+                        <select id="run-shoe-selector" class="form-control"><option value="">不指定</option></select>
+                    </div>
+                    <button id="save-training" class="btn btn-outline">儲存紀錄</button>
+                    <button id="export-card-btn" class="btn btn-outline">輸出小卡</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interval Calculator -->
+        <section id="interval" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">間歇訓練<br>配速解析</h2><p class="section-subtitle">輸入多組訓練，分別計算配速。</p></div>
+                <div class="form-pane">
+                    <div class="form-group">
+                        <label class="form-label">計算模式</label>
+                        <div class="btn-group">
+                            <button id="interval-mode-time" class="btn btn-outline active">按時間計算</button>
+                            <button id="interval-mode-pace" class="btn btn-outline">按配速計算</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label for="interval-distance" class="form-label">單趟間歇距離 (公尺)</label><input type="number" id="interval-distance" class="form-control" placeholder="例如: 400"></div>
+
+                    <div id="interval-time-inputs">
+                        <div id="interval-sets-container">
+                            <div class="form-group interval-set">
+                                <label class="form-label" for="interval-seconds-0">單趟間歇時間 (秒)</label>
+                                <input type="number" class="form-control interval-seconds" id="interval-seconds-0" name="interval-seconds-0" placeholder="例如: 90">
+                                <label class="form-label" for="interval-count-0">次數</label>
+                                <input type="number" class="form-control interval-count" id="interval-count-0" name="interval-count-0" placeholder="例如: 8">
+                            </div>
+                        </div>
+                        <button id="add-interval-set-btn" class="btn btn-outline" style="margin-top: 10px;">新增間歇組</button>
+                        <button id="clear-interval-sets-btn" class="btn btn-outline" style="margin-top: 10px;">清除所有間歇組</button>
+                    </div>
+
+                    <div id="interval-pace-inputs" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label" for="interval-target-pace-min">目標配速 (分'秒"/公里)</label>
+                            <div class="time-input-group">
+                                <input type="number" id="interval-target-pace-min" class="form-control time-input" placeholder="分">
+                                <input type="number" id="interval-target-pace-sec" class="form-control time-input" placeholder="秒">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="interval-pace-reps">次數</label>
+                            <input type="number" id="interval-pace-reps" class="form-control" placeholder="例如: 8">
+                        </div>
+                    </div>
+
+                    <button id="interval-calculate" class="btn btn-primary">解析間歇訓練</button>
+                </div>
+                <div class="results-pane"><div id="interval-results-list" class="metrics-list"></div>
+                    <div class="metrics-list" style="margin-top: 20px;">
+                        <div class="metric-item">
+                            <span class="metric-number">總</span>
+                            <div class="metric-content">
+                                <h3 class="metric-name">總距離</h3>
+                                <p class="metric-value" id="interval-total-distance">0 km</p>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-number">總</span>
+                            <div class="metric-content">
+                                <h3 class="metric-name">總時間</h3>
+                                <p class="metric-value" id="interval-total-time">00:00:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: GAP Calculator -->
+        <section id="gap" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">坡度調整<br>配速模型 (GAP)</h2><p class="section-subtitle">計算在特定坡度下的等效平路配速。</p></div>
+                <div class="form-pane">
+                    <div class="form-group"><label for="gap-pace" class="form-label">實際配速 (分鐘/公里)</label><input type="number" id="gap-pace" class="form-control" placeholder="例如: 5.5 (5分30秒)"></div>
+                    <div class="form-group"><label for="gap-grade" class="form-label">坡度 (%)</label><input type="number" id="gap-grade" class="form-control" placeholder="例如: 4"></div>
+                    <button id="gap-calculate" class="btn btn-primary">計算 GAP</button>
+                </div>
+                <div class="results-pane"><div class="metrics-list">
+                    <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name" data-tooltip="Grade Adjusted Pace">等效平路配速 (GAP)</h3><p class="metric-value" id="gap-result">0:00/km</p></div></div>
+                </div></div>
+            </div>
+        </section>
+
+        <!-- Section 4: Treadmill Converter -->
+        <section id="treadmill" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">跑步機<br>配速換算</h2><p class="section-subtitle">在跑步機上模擬真實路跑的強度與配速。</p></div>
+                <div class="form-pane">
+                    <div class="form-group"><label for="treadmill-speed" class="form-label">跑步機速度 (km/h)</label><input type="number" id="treadmill-speed" class="form-control" placeholder="例如: 12"></div>
+                    <div class="form-group"><label for="treadmill-incline" class="form-label">跑步機坡度 (%)</label><input type="number" id="treadmill-incline" class="form-control" placeholder="例如: 1.0"></div>
+                    <button id="treadmill-convert" class="btn btn-primary">換算等效配速</button>
+
+                    <h3 class="form-section-title" style="margin-top: 30px;">平路配速反向換算</h3>
+                    <div class="form-group"><label for="flat-pace-input" class="form-label">目標平路配速 (分鐘/公里)</label><input type="number" id="flat-pace-input" class="form-control" placeholder="例如: 5.0"></div>
+                    <div class="form-group"><label for="reverse-treadmill-incline" class="form-label">跑步機坡度 (%)</label><input type="number" id="reverse-treadmill-incline" class="form-control" placeholder="例如: 1.0"></div>
+                    <button id="reverse-treadmill-convert-btn" class="btn btn-primary">換算跑步機速度</button>
+                </div>
+                <div class="results-pane"><div class="metrics-list">
+                    <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">等效平路配速</h3><p class="metric-value" id="equivalent-pace">0:00/km</p></div></div>
+                    <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">跑步機速度</h3><p class="metric-value" id="treadmill-speed-result">0.0 km/h</p></div></div>
+                </div></div>
+            </div>
+        </section>
+
+        <!-- Section 5: Training Pace Calculator -->
+        <section id="training-pace" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">訓練配速<br>計算器</h2><p class="section-subtitle">根據您的目前或目標成績，推算科學化的訓練配速區間。</p></div>
+                <div class="form-pane">
+                    <div class="form-group">
+                        <label class="form-label">輸入模式</label>
+                        <div class="btn-group">
+                            <button id="tpc-mode-current" class="btn btn-outline active">使用目前成績</button>
+                            <button id="tpc-mode-target" class="btn btn-outline">設定目標成績</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tpc-distance" class="form-label">距離 (公里)</label>
+                        <input type="number" id="tpc-distance" class="form-control" list="tpc-common-distances" placeholder="例如: 10">
+                        <datalist id="tpc-common-distances">
+                            <option value="3"></option>
+                            <option value="5"></option>
+                            <option value="10"></option>
+                            <option value="21.0975"></option>
+                            <option value="42.195"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">輸入方式</label>
+                        <div class="btn-group">
+                            <button id="tpc-input-time" class="btn btn-outline active">完賽時間</button>
+                            <button id="tpc-input-pace" class="btn btn-outline">平均配速</button>
+                        </div>
+                    </div>
+                    <div id="tpc-time-group" class="form-group">
+                        <label for="tpc-hours" class="form-label">完賽時間</label>
+                        <div class="time-input-group">
+                            <input type="number" id="tpc-hours" class="form-control time-input" placeholder="時">
+                            <input type="number" id="tpc-minutes" class="form-control time-input" placeholder="分">
+                            <input type="number" id="tpc-seconds" class="form-control time-input" placeholder="秒">
+                        </div>
+                    </div>
+                    <div id="tpc-pace-group" class="form-group" style="display: none;">
+                        <label for="tpc-pace-min" class="form-label">平均配速 (分'秒"/公里)</label>
+                        <div class="time-input-group">
+                            <input type="number" id="tpc-pace-min" class="form-control time-input" placeholder="分">
+                            <input type="number" id="tpc-pace-sec" class="form-control time-input" placeholder="秒">
+                        </div>
+                    </div>
+                    <button id="tpc-calculate" class="btn btn-primary">計算訓練配速</button>
+                </div>
+                <div class="results-pane">
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <span class="metric-number">基準</span>
+                            <div class="metric-content">
+                                <h3 class="metric-name">等效配速</h3>
+                                <p class="metric-value" id="tpc-base-pace">0:00/km</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tpc-results-content">
+                        <!-- Interval Training -->
+                        <h3 class="form-section-title" style="margin-top: 20px;">間歇跑 (Interval)</h3>
+                        <div class="form-group-inline">
+                            <div class="form-group">
+                                <label for="tpc-interval-dist" class="form-label">趟數距離 (m)</label>
+                                <input type="number" id="tpc-interval-dist" class="form-control" list="tpc-interval-distances" placeholder="400">
+                                <datalist id="tpc-interval-distances"><option value="200"></option><option value="400"></option><option value="800"></option><option value="1000"></option><option value="1600"></option></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="tpc-interval-reps" class="form-label">趟數</label>
+                                <input type="number" id="tpc-interval-reps" class="form-control" placeholder="8">
+                            </div>
+                        </div>
+                        <div class="metrics-list">
+                            <div class="metric-item"><div class="metric-content"><h3 class="metric-name">建議配速</h3><p class="metric-value" id="tpc-interval-pace">0:00/km</p></div></div>
+                            <div class="metric-item"><div class="metric-content"><h3 class="metric-name">恢復跑 (45min)</h3><p class="metric-value" id="tpc-interval-recovery">0:00/km</p></div></div>
+                        </div>
+
+                        <!-- LSD Training -->
+                        <h3 class="form-section-title" style="margin-top: 20px;">長距離慢跑 (LSD)</h3>
+                        <div class="form-group">
+                            <label for="tpc-lsd-dist" class="form-label">LSD 距離 (km)</label>
+                            <input type="number" id="tpc-lsd-dist" class="form-control" list="tpc-lsd-distances" placeholder="21">
+                            <datalist id="tpc-lsd-distances"><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option></datalist>
+                        </div>
+                        <div class="metrics-list">
+                            <div class="metric-item"><div class="metric-content"><h3 class="metric-name">建議配速</h3><p class="metric-value" id="tpc-lsd-pace">0:00/km</p></div></div>
+                            <div class="metric-item"><div class="metric-content"><h3 class="metric-name">恢復跑 (40min)</h3><p class="metric-value" id="tpc-lsd-recovery">0:00/km</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Training Plan Generator -->
+        <section id="plan-generator" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">完整課表<br>產生器</h2><p class="section-subtitle">根據您的能力或目標，自動生成包含熱身、主課表、緩和的完整訓練建議。</p></div>
+                <div class="form-pane">
+                    <div class="form-group">
+                        <label class="form-label">基準類型</label>
+                        <div class="btn-group">
+                            <button id="plan-mode-result" class="btn btn-outline active">依據最佳成績</button>
+                            <button id="plan-mode-goal" class="btn btn-outline">依據目標賽事</button>
+                        </div>
+                    </div>
+
+                    <!-- Input Group for Best Result -->
+                    <div id="plan-result-group">
+                        <div class="form-group">
+                            <label for="plan-result-dist" class="form-label">比賽距離</label>
+                            <select id="plan-result-dist" class="form-control form-select">
+                                <option value="3">3K</option>
+                                <option value="5">5K</option>
+                                <option value="10" selected>10K</option>
+                                <option value="21.0975">半馬 (21K)</option>
+                                <option value="42.195">全馬 (42K)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-result-hours" class="form-label">完賽時間</label>
+                            <div class="time-input-group">
+                                <input type="number" id="plan-result-hours" class="form-control time-input" placeholder="時">
+                                <input type="number" id="plan-result-minutes" class="form-control time-input" placeholder="分">
+                                <input type="number" id="plan-result-seconds" class="form-control time-input" placeholder="秒">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Group for Goal -->
+                    <div id="plan-goal-group" style="display: none;">
+                         <div class="form-group">
+                            <label for="plan-goal-dist" class="form-label">目標距離</label>
+                            <select id="plan-goal-dist" class="form-control form-select">
+                                <option value="3">3K</option>
+                                <option value="5">5K</option>
+                                <option value="10">10K</option>
+                                <option value="21.0975" selected>半馬 (21K)</option>
+                                <option value="42.195">全馬 (42K)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-goal-hours" class="form-label">目標時間</label>
+                            <div class="time-input-group">
+                                <input type="number" id="plan-goal-hours" class="form-control time-input" placeholder="時">
+                                <input type="number" id="plan-goal-minutes" class="form-control time-input" placeholder="分">
+                                <input type="number" id="plan-goal-seconds" class="form-control time-input" placeholder="秒">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="form-divider">
+
+                    <h3 class="form-section-title">主課表</h3>
+                    <div class="form-group">
+                        <label for="plan-main-type" class="form-label">課表類型</label>
+                        <select id="plan-main-type" class="form-control form-select">
+                            <option value="Interval">間歇 (Interval)</option>
+                            <option value="Tempo">節奏跑 (Tempo)</option>
+                            <option value="LSD">長距離慢跑 (LSD)</option>
+                            <option value="RaceSim">比賽模擬 (Race Simulation)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="plan-main-details" class="form-label">內容 (距離/時間 x 組數)</label>
+                        <input type="text" id="plan-main-details" class="form-control" placeholder="例如: 800m x 6 或 20 min">
+                    </div>
+                     <div class="form-group">
+                        <label for="plan-main-pace" class="form-label">目標強度</label>
+                        <select id="plan-main-pace" class="form-control form-select">
+                            <option value="I pace">間歇配速 (I pace)</option>
+                            <option value="T pace">閾值配速 (T pace)</option>
+                            <option value="M pace">全馬配速 (M pace)</option>
+                            <option value="E pace">輕鬆跑配速 (E pace)</option>
+                        </select>
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <h3 class="form-section-title">熱身</h3>
+                     <div class="form-group">
+                        <label class="form-label">偏好輸入</label>
+                        <div class="btn-group">
+                            <button id="plan-warmup-time" class="btn btn-outline active">時間</button>
+                            <button id="plan-warmup-dist" class="btn btn-outline">距離</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="plan-warmup-value" class="form-label">時間 (分鐘) 或 距離 (公里)</label>
+                        <input type="number" id="plan-warmup-value" class="form-control" placeholder="例如: 15 (分鐘)">
+                    </div>
+
+                    <button id="plan-generate-btn" class="btn btn-primary">產生完整課表</button>
+                </div>
+                <div class="results-pane">
+                    <div id="plan-results-content">
+                        <h3 class="form-section-title">您的專屬課表</h3>
+                        <div class="metrics-list">
+                            <div class="metric-item">
+                                <span class="metric-number">熱身</span>
+                                <div class="metric-content">
+                                    <p class="metric-value" id="plan-res-warmup">--</p>
+                                    <p class="metric-detail" id="plan-res-warmup-pace">配速: --</p>
+                                </div>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-number">主</span>
+                                <div class="metric-content">
+                                    <h3 class="metric-name" id="plan-res-main-title">--</h3>
+                                    <p class="metric-value" id="plan-res-main-pace">配速: --</p>
+                                </div>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-number">緩和</span>
+                                <div class="metric-content">
+                                    <p class="metric-value" id="plan-res-cooldown">--</p>
+                                    <p class="metric-detail" id="plan-res-cooldown-pace">配速: --</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Race Predictor -->
+        <section id="race" class="showcase-section">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">目標賽事<br>完賽預估</h2><p class="section-subtitle">輸入您的EPH，預測您在目標賽事中的表現。</p></div>
+                <div class="form-pane">
+                    <h3 class="form-section-title">功能一: 預估賽事完賽時間</h3>
+                    <div class="form-group"><label for="race-distance" class="form-label">賽事距離 (公里)</label><input type="number" id="race-distance" class="form-control" placeholder="例如: 100"></div>
+                    <div class="form-group"><label for="race-elevation-gain" class="form-label">賽事總爬升 (公尺)</label><input type="number" id="race-elevation-gain" class="form-control" placeholder="例如: 5500"></div>
+                    <div class="form-group"><label for="race-elevation-loss" class="form-label">賽事總下降 (公尺)</label><input type="number" id="race-elevation-loss" class="form-control" placeholder="例如: 5400"></div>
+                    <div class="form-group"><label for="user-eph" class="form-label">您的平均EPH</label><input type="number" id="user-eph" class="form-control" placeholder="例如: 8.5"></div>
+                    <button id="race-predict" class="btn btn-primary">預估完賽時間</button>
+                </div>
+                <div class="results-pane">
+                    <div class="metrics-list">
+                        <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">預估完賽時間</h3><p class="metric-value" id="race-time">00:00:00</p></div></div>
+                        <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">賽事等效距離</h3><p class="metric-value" id="race-ep">0 ekm</p></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Strategy Section -->
+            <details class="advanced-section" id="advanced-strategy-section">
+                <summary class="advanced-section-summary">進階策略規劃 (選填)</summary>
+                <div class="advanced-section-content">
+                    <h4 class="form-subsection-title">1. 個人能力係數</h4>
+                    <div class="form-group-inline">
+                        <div class="form-group">
+                            <label for="climbing-factor" class="form-label">爬坡能力係數</label>
+                            <input type="number" id="climbing-factor" class="form-control" placeholder="1.0" step="0.05">
+                        </div>
+                        <div class="form-group">
+                            <label for="descending-factor" class="form-label">下坡能力係數</label>
+                            <input type="number" id="descending-factor" class="form-control" placeholder="1.0" step="0.05">
+                        </div>
+                    </div>
+                    <p class="form-hint">此係數反映您與通用模型相比的爬坡/下坡能力。1.0 為平均水平，1.1 代表強 10%，0.9 代表弱 10%。</p>
+
+                    <h4 class="form-subsection-title">2. 補給站策略</h4>
+                    <div id="aid-station-container"></div>
+                    <button id="add-aid-station-btn" class="btn btn-outline btn-small">新增補給站</button>
+                </div>
+            </details>
+
+            <div class="section-grid" style="margin-top: 4rem; border-top: 1px solid var(--color-border); padding-top: 4rem;">
+                <div class="title-pane"><h2 class="section-title">訓練目標<br>時間計算</h2><p class="section-subtitle">根據一場參考賽事的表現，計算您在特定訓練路線上應達成的目標時間。</p></div>
+                <div class="form-pane">
+                    <h3 class="form-section-title">功能二: 計算訓練目標時間</h3>
+                    <p class="section-subtitle" style="font-size: 0.8rem; color: var(--color-muted); margin-bottom: 1.5rem;">備註: 賽事與訓練的距離及爬升不應差距過多，否則可能產生謬誤偏差。</p>
+                    
+                    <h4 class="form-subsection-title">參考賽事</h4>
+                    <div class="form-group"><label for="ref-race-dist" class="form-label">賽事距離 (公里)</label><input type="number" id="ref-race-dist" class="form-control"></div>
+                    <div class="form-group"><label for="ref-race-elev" class="form-label">賽事爬升 (公尺)</label><input type="number" id="ref-race-elev" class="form-control"></div>
+                    <div class="form-group"><label for="ref-race-time-h" class="form-label">完賽時間</label><div class="time-input-group"><input type="number" id="ref-race-time-h" class="form-control time-input" placeholder="時"><input type="number" id="ref-race-time-m" class="form-control time-input" placeholder="分"><input type="number" id="ref-race-time-s" class="form-control time-input" placeholder="秒"></div></div>
+
+                    <h4 class="form-subsection-title" style="margin-top: 2rem;">目標訓練</h4>
+                    <div class="form-group"><label for="train-dist" class="form-label">訓練距離 (公里)</label><input type="number" id="train-dist" class="form-control"></div>
+                    <div class="form-group"><label for="train-elev" class="form-label">訓練爬升 (公尺)</label><input type="number" id="train-elev" class="form-control"></div>
+                    
+                    <button id="calculate-training-time-btn" class="btn btn-primary">計算訓練時間</button>
+                </div>
+                <div class="results-pane">
+                    <div class="metrics-list">
+                        <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">預估訓練時間</h3><p class="metric-value" id="training-time-result">00:00:00</p></div></div>
+                        <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">參考賽事 EPH</h3><p class="metric-value" id="ref-race-eph-result">0.0</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 6: Debrief Journal -->
+        <section id="debrief" class="showcase-section alt-layout">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">賽後復盤<br>日誌</h2><p class="section-subtitle">記錄賽事點滴，轉化為成長的養分。</p></div>
+                <div class="form-pane">
+                    <div class="form-group"><label for="debrief-race-name" class="form-label">賽事名稱</label><input type="text" id="debrief-race-name" class="form-control" placeholder="例如: 陽明山越野賽"></div>
+                    <div class="form-group"><label for="debrief-date" class="form-label">賽事日期</label><input type="date" id="debrief-date" class="form-control"></div>
+                    <div class="form-group"><label for="debrief-actual-time" class="form-label">實際完賽時間</label><input type="text" id="debrief-actual-time" class="form-control" placeholder="例如: 08:30:00"></div>
+                    <div class="form-group"><label for="debrief-mental-state" class="form-label">心態感受</label><textarea id="debrief-mental-state" class="form-control" rows="3" placeholder="例如: 前半段信心滿滿，後半段意志力崩潰..."></textarea></div>
+                    <div class="form-group"><label for="debrief-nutrition" class="form-label">補給策略回顧</label><textarea id="debrief-nutrition" class="form-control" rows="3" placeholder="例如: 能量膠吃太少，導致後半段抽筋..."></textarea></div>
+                    <div class="form-group"><label for="debrief-gear" class="form-label">裝備表現</label><textarea id="debrief-gear" class="form-control" rows="3" placeholder="例如: 新鞋磨腳，背包晃動..."></textarea></div>
+                    <button id="debrief-submit" class="btn btn-primary">提交復盤</button>
+                </div>
+                <div class="calendar-pane">
+                    <div id="debrief-calendar"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 7: Gear Locker -->
+        <section id="gear" class="showcase-section alt-layout">
+            <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">我的裝備庫<br>跑鞋輪替</h2><p class="section-subtitle">追蹤每一雙戰靴的服役里程，有效預防傷病。</p></div>
+                <div class="form-pane">
+                    <h3 class="form-section-title">新增跑鞋</h3>
+                    <div class="form-group"><label for="shoe-name" class="form-label">跑鞋型號</label><input type="text" id="shoe-name" class="form-control" placeholder="例如: Speedgoat 5"></div>
+                    <div class="form-group"><label for="shoe-brand" class="form-label">品牌</label><input type="text" id="shoe-brand" class="form-control" placeholder="例如: Hoka One One"></div>
+                    <div class="form-group"><label for="shoe-mileage" class="form-label">初始里程 (公里)</label><input type="number" id="shoe-mileage" class="form-control" placeholder="0"></div>
+                    <button id="add-shoe-btn" class="btn btn-primary">加入裝備庫</button>
+                </div>
+                <div class="shoe-list-pane">
+                    <div id="shoe-list"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 8: History -->
+        <section id="history" class="showcase-section alt-layout">
+             <div class="section-grid">
+                <div class="title-pane"><h2 class="section-title">歷史數據<br>回放</h2><p class="section-subtitle">回顧您的每一次訓練，追蹤您的持續進步。</p><button id="clear-history" class="btn btn-outline mt-8">全部清除</button></div>
+                <div class="history-pane"><div id="history-list"><div class="history-empty">尚無歷史紀錄</div></div></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Hidden element for PNG export -->
+    <div id="card-exporter-wrapper" class="card-exporter-hidden"><div id="card-exporter-content" class="results-pane"></div></div>
+
+    <script src="dist/bundle.js" defer></script>
+</body>
+</html>

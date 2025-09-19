@@ -1,0 +1,184 @@
+// i18n/en-US.json
+{
+  "app": {
+    "title": "Trail Training Assistant",
+    "description": "Professional trail runner training assistant tool providing multi-dimensional training analysis and decision support"
+  },
+  "calculator": {
+    "title": "EP/EPH Calculator",
+    "distanceLabel": "Distance (km)",
+    "elevationLabel": "Elevation Gain (m)",
+    "targetTimeLabel": "Target Time (hours)",
+    "calculateButton": "Calculate EP/EPH",
+    "result": {
+      "ep": "Equivalent Pace (EP): {value} min/km",
+      "eph": "Equivalent Pace per Hour (EPH): {value}",
+      "rri": "Roughness Rating Index (RRI): {value}",
+      "technicality": "Technical Difficulty: {level}",
+      "low": "Beginner Level",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "expert": "Expert Level",
+      "technicalityLevels": {
+        "easy": "Easy Terrain",
+        "moderate": "Moderate Difficulty",
+        "challenging": "Challenging",
+        "difficult": "Difficult",
+        "extreme": "Extreme"
+      }
+    },
+    "errors": {
+      "invalidDistance": "Invalid distance: must be between {min}-{max} km",
+      "invalidElevation": "Invalid elevation: must be between {min}-{max} m",
+      "invalidTargetTime": "Invalid target time: must be between {min}-{max} hours",
+      "calculationFailed": "Calculation failed, please check input values"
+    }
+  },
+  "gpx": {
+    "title": "GPX Route Analysis",
+    "uploadLabel": "Upload GPX File",
+    "analyzeButton": "Analyze Route",
+    "result": {
+      "title": "Route Analysis Results",
+      "distance": "Distance: {value} km",
+      "elevationGain": "Total Elevation Gain: {value} m",
+      "elevationLoss": "Total Elevation Loss: {value} m",
+      "maxElevation": "Highest Point: {value} m",
+      "minElevation": "Lowest Point: {value} m",
+      "rri": "Roughness Rating Index (RRI): {value}",
+      "technicality": "Technical Difficulty: {level}",
+      "technicalityDescription": {
+        "easy": "Easy terrain: suitable for beginners",
+        "moderate": "Moderate difficulty: suitable for general runners",
+        "challenging": "Challenging: requires good training foundation",
+        "difficult": "Difficult: only for experienced runners",
+        "extreme": "Extreme: for professional runners only"
+      }
+    },
+    "errors": {
+      "invalidFile": "Please upload a valid GPX file",
+      "parseFailed": "GPX parsing failed: {message}",
+      "noTrackPoints": "No track points found in GPX file",
+      "notEnoughPoints": "GPX file requires at least 2 valid track points"
+    }
+  },
+  "risk": {
+    "title": "Downhill Risk Radar",
+    "downhillDistanceLabel": "Downhill Distance (km)",
+    "descentLabel": "Descent (m)",
+    "analyzeButton": "Analyze Risk",
+    "result": {
+      "title": "Risk Analysis Results",
+      "descentPerKm": "Descent Slope: {value} m/km",
+      "riskScore": "Risk Score: {value}/100",
+      "riskLevel": "Risk Level: {level}",
+      "low": "Low Risk",
+      "moderate": "Moderate Risk",
+      "high": "High Risk",
+      "critical": "Critical Risk",
+      "edtp": "Equivalent Downhill Training Pace (EDTP): {value} min/km",
+      "suggestionsTitle": "Safety Suggestions",
+      "trainingTitle": "Training Prescription",
+      "paceImpact": "Pace Impact: +{value} min/km",
+      "repetitions": "Recommended Repetitions: {value} times"
+    },
+    "errors": {
+      "invalidDownhillDistance": "Invalid downhill distance: must be between {min}-{max} km",
+      "invalidDescent": "Invalid descent: must be between {min}-{max} m",
+      "analysisFailed": "Risk analysis failed, please check input values"
+    }
+  },
+  "weather": {
+    "title": "Weather Impact Assessment",
+    "wbtLabel": "Wet Bulb Globe Temperature (WBGT)",
+    "windSpeedLabel": "Wind Speed (m/s)",
+    "analyzeButton": "Assess Impact",
+    "result": {
+      "title": "Weather Impact Results",
+      "heatIndex": "Heat Index: {value}",
+      "riskLevel": "Heat Risk: {level}",
+      "low": "Safe",
+      "moderate": "Caution",
+      "high": "High Risk",
+      "veryHigh": "Very High Risk",
+      "extreme": "Extreme",
+      "paceImpact": "Pace Impact: +{value} min/km",
+      "adjustedPace": "Adjusted Pace: {value} min/km",
+      "suggestionsTitle": "Safety Suggestions",
+      "trainingTitle": "Training Recommendations"
+    },
+    "errors": {
+      "invalidWbt": "Invalid WBGT temperature: must be between {min}-{max} °C",
+      "invalidWindSpeed": "Invalid wind speed: must be between {min}-{max} m/s",
+      "analysisFailed": "Weather assessment failed, please check input values"
+    }
+  },
+  "treadmill": {
+    "title": "Treadmill Conversion Tool",
+    "treadmillSettings": "Treadmill Settings",
+    "roadSettings": "Road Settings",
+    "paceLabel": "Pace",
+    "gradientLabel": "Gradient",
+    "targetGradientLabel": "Target Treadmill Gradient",
+    "convertButton": "Perform Conversion",
+    "resetButton": "Reset",
+    "result": {
+      "title": "Conversion Diagnosis Results",
+      "treadmillToRoad": "Treadmill → Road Conversion",
+      "roadToTreadmill": "Road → Treadmill Conversion",
+      "gradientConversion": "Gradient Conversion",
+      "roadToTreadmill": "Road→Treadmill",
+      "treadmillToRoad": "Treadmill→Road",
+      "paceDifference": "Pace Difference",
+      "normal": "Normal",
+      "warning": "Warning",
+      "critical": "Critical",
+      "exportPng": "Export as PNG"
+    },
+    "errors": {
+      "invalidPace": "Pace must be between {min}-{max} min/km",
+      "invalidGradient": "Gradient must be between {min}-{max}%",
+      "conversionFailed": "Conversion failed, please check input values"
+    }
+  },
+  "history": {
+    "title": "History",
+    "clearButton": "Clear History",
+    "empty": "No history records",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "feature": {
+      "treadmill": "Treadmill Conversion",
+      "calculator": "EP/EPH Calculation",
+      "gpx": "GPX Analysis",
+      "risk": "Risk Analysis",
+      "weather": "Weather Impact"
+    },
+    "detail": {
+      "title": "History Details",
+      "close": "Close",
+      "inputParameters": "Input Parameters",
+      "calculationResults": "Calculation Results",
+      "riskFactors": "Risk Factors",
+      "suggestions": "Suggestions"
+    }
+  },
+  "errors": {
+    "globalError": "Error occurred: {message}",
+    "pngExportFailed": "PNG export failed, please try again later",
+    "historyInitFailed": "Failed to initialize history feature",
+    "appInitFailed": "Failed to start application, please refresh the page"
+  },
+  "common": {
+    "minKm": "min/km",
+    "minMile": "min/mile",
+    "percent": "%",
+    "km": "km",
+    "m": "m",
+    "hours": "hours",
+    "mPerKm": "m/km",
+    "degree": "°",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

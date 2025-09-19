@@ -1,0 +1,184 @@
+// i18n/zh-TW.json
+{
+  "app": {
+    "title": "越野訓練助手",
+    "description": "專業越野跑者訓練輔助工具，提供多維度訓練分析與決策支持"
+  },
+  "calculator": {
+    "title": "EP/EPH 計算器",
+    "distanceLabel": "距離 (km)",
+    "elevationLabel": "爬升 (m)",
+    "targetTimeLabel": "目標時間 (小時)",
+    "calculateButton": "計算 EP/EPH",
+    "result": {
+      "ep": "平地等效配速 (EP): {value} min/km",
+      "eph": "每小時等效配速 (EPH): {value}",
+      "rri": "粗糙度指數 (RRI): {value}",
+      "technicality": "技術難度: {level}",
+      "low": "初學者級別",
+      "intermediate": "中級",
+      "advanced": "高級",
+      "expert": "專家級",
+      "technicalityLevels": {
+        "easy": "平緩地形",
+        "moderate": "中等難度",
+        "challenging": "具挑戰性",
+        "difficult": "困難",
+        "extreme": "極端困難"
+      }
+    },
+    "errors": {
+      "invalidDistance": "無效的距離：必須在 {min}-{max} km",
+      "invalidElevation": "無效的爬升：必須在 {min}-{max} m",
+      "invalidTargetTime": "無效的目標時間：必須在 {min}-{max} 小時",
+      "calculationFailed": "計算失敗，請檢查輸入值"
+    }
+  },
+  "gpx": {
+    "title": "GPX 路線分析",
+    "uploadLabel": "上傳 GPX 檔案",
+    "analyzeButton": "分析路線",
+    "result": {
+      "title": "路線分析結果",
+      "distance": "距離: {value} km",
+      "elevationGain": "總爬升: {value} m",
+      "elevationLoss": "總下降: {value} m",
+      "maxElevation": "最高點: {value} m",
+      "minElevation": "最低點: {value} m",
+      "rri": "粗糙度指數 (RRI): {value}",
+      "technicality": "技術難度: {level}",
+      "technicalityDescription": {
+        "easy": "平緩地形：適合初學者",
+        "moderate": "中等難度：適合一般跑者",
+        "challenging": "具挑戰性：需要良好訓練基礎",
+        "difficult": "困難：僅適合經驗豐富跑者",
+        "extreme": "極端困難：專業跑者專用"
+      }
+    },
+    "errors": {
+      "invalidFile": "請上傳有效的 GPX 文件",
+      "parseFailed": "GPX 解析失敗: {message}",
+      "noTrackPoints": "GPX 文件中沒有找到路徑點",
+      "notEnoughPoints": "GPX 文件需要至少 2 個有效路徑點"
+    }
+  },
+  "risk": {
+    "title": "下坡風險雷達",
+    "downhillDistanceLabel": "下坡距離 (km)",
+    "descentLabel": "下降高度 (m)",
+    "analyzeButton": "分析風險",
+    "result": {
+      "title": "風險分析結果",
+      "descentPerKm": "下降坡度: {value} m/km",
+      "riskScore": "風險分數: {value}/100",
+      "riskLevel": "風險等級: {level}",
+      "low": "低風險",
+      "moderate": "中風險",
+      "high": "高風險",
+      "critical": "極高風險",
+      "edtp": "等效下坡訓練配速 (EDTP): {value} min/km",
+      "suggestionsTitle": "安全建議",
+      "trainingTitle": "訓練處方",
+      "paceImpact": "配速影響: +{value} min/km",
+      "repetitions": "建議重複: {value} 次"
+    },
+    "errors": {
+      "invalidDownhillDistance": "無效的下坡距離：必須在 {min}-{max} km",
+      "invalidDescent": "無效的下降高度：必須在 {min}-{max} m",
+      "analysisFailed": "風險分析失敗，請檢查輸入值"
+    }
+  },
+  "weather": {
+    "title": "天氣影響評估",
+    "wbtLabel": "濕球黑球溫度 (WBGT)",
+    "windSpeedLabel": "風速 (m/s)",
+    "analyzeButton": "評估影響",
+    "result": {
+      "title": "天氣影響結果",
+      "heatIndex": "熱指數: {value}",
+      "riskLevel": "熱風險: {level}",
+      "low": "安全",
+      "moderate": "注意",
+      "high": "高風險",
+      "veryHigh": "極高風險",
+      "extreme": "危險",
+      "paceImpact": "配速影響: +{value} min/km",
+      "adjustedPace": "調整配速: {value} min/km",
+      "suggestionsTitle": "安全建議",
+      "trainingTitle": "訓練建議"
+    },
+    "errors": {
+      "invalidWbt": "無效的 WBGT 溫度：必須在 {min}-{max} °C",
+      "invalidWindSpeed": "無效的風速：必須在 {min}-{max} m/s",
+      "analysisFailed": "天氣評估失敗，請檢查輸入值"
+    }
+  },
+  "treadmill": {
+    "title": "跑步機換算工具",
+    "treadmillSettings": "跑步機設定",
+    "roadSettings": "公路設定",
+    "paceLabel": "配速",
+    "gradientLabel": "坡度",
+    "targetGradientLabel": "目標跑步機坡度",
+    "convertButton": "執行換算",
+    "resetButton": "重置",
+    "result": {
+      "title": "換算診斷結果",
+      "treadmillToRoad": "跑步機 → 公路換算",
+      "roadToTreadmill": "公路 → 跑步機換算",
+      "gradientConversion": "坡度換算",
+      "roadToTreadmill": "公路→跑步機",
+      "treadmillToRoad": "跑步機→公路",
+      "paceDifference": "配速差異",
+      "normal": "正常",
+      "warning": "警告",
+      "critical": "危險",
+      "exportPng": "匯出為 PNG"
+    },
+    "errors": {
+      "invalidPace": "配速必須在 {min}-{max} min/km 之間",
+      "invalidGradient": "坡度必須在 {min}-{max}% 之間",
+      "conversionFailed": "換算失敗，請檢查輸入值"
+    }
+  },
+  "history": {
+    "title": "歷史紀錄",
+    "clearButton": "清除紀錄",
+    "empty": "尚無歷史紀錄",
+    "today": "今天",
+    "yesterday": "昨天",
+    "feature": {
+      "treadmill": "跑步機換算",
+      "calculator": "EP/EPH 計算",
+      "gpx": "GPX 分析",
+      "risk": "風險分析",
+      "weather": "天氣影響"
+    },
+    "detail": {
+      "title": "歷史詳情",
+      "close": "關閉",
+      "inputParameters": "輸入參數",
+      "calculationResults": "計算結果",
+      "riskFactors": "風險因素",
+      "suggestions": "建議"
+    }
+  },
+  "errors": {
+    "globalError": "發生錯誤: {message}",
+    "pngExportFailed": "PNG 匯出失敗，請稍後再試",
+    "historyInitFailed": "無法初始化歷史紀錄功能",
+    "appInitFailed": "無法啟動應用，請刷新頁面重試"
+  },
+  "common": {
+    "minKm": "min/km",
+    "minMile": "min/mile",
+    "percent": "%",
+    "km": "km",
+    "m": "m",
+    "hours": "小時",
+    "mPerKm": "m/km",
+    "degree": "°",
+    "cancel": "取消",
+    "confirm": "確認"
+  }
+}

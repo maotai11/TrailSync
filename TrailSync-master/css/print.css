@@ -1,0 +1,160 @@
+/* css/print.css */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  body {
+    background-color: transparent !important;
+    color: #000000;
+    font-family: 'Source Han Sans', 'Noto Sans', 'Microsoft JhengHei', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .png-export-container {
+    width: 800px;
+    background-color: transparent;
+    padding: 20px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .export-header {
+    text-align: center;
+    margin-bottom: 30px;
+    
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #000000;
+    }
+    
+    .export-subtitle {
+      font-size: 16px;
+      color: #666666;
+    }
+  }
+  
+  .export-content {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    
+    .result-card {
+      border-left: none;
+      padding: 0;
+      background-color: transparent;
+      
+      .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        
+        .assessment-badge {
+          padding: 2px 8px;
+          border-radius: 4px;
+          font-weight: bold;
+          font-size: 14px;
+          
+          &.normal {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+          }
+          
+          &.warning {
+            background-color: #fff8e1;
+            color: #e65100;
+          }
+          
+          &.critical {
+            background-color: #ffebee;
+            color: #b71c1c;
+          }
+        }
+      }
+      
+      .result-section {
+        margin-bottom: 18px;
+        
+        h5 {
+          font-size: 16px;
+          margin-bottom: 8px;
+          color: #333333;
+          font-weight: bold;
+        }
+        
+        .result-grid {
+          display: block;
+          
+          div {
+            display: block;
+            margin-bottom: 6px;
+            line-height: 1.4;
+          }
+        }
+      }
+      
+      .diff-percentage {
+        .diff-value {
+          font-weight: bold;
+          color: #000000;
+        }
+        
+        .diff-bar {
+          height: 6px;
+          background-color: #e0e0e0;
+          border-radius: 3px;
+          margin-top: 4px;
+          overflow: hidden;
+          
+          .diff-fill {
+            height: 100%;
+            border-radius: 3px;
+          }
+        }
+      }
+    }
+  }
+  
+  .export-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    color: #666666;
+    
+    .watermark {
+      font-style: italic;
+      margin-top: 8px;
+      color: #999999;
+    }
+  }
+  
+  .app-header, 
+  .app-footer, 
+  .dev-tools,
+  .converter-actions,
+  .result-actions,
+  .history-detail-actions {
+    display: none !important;
+  }
+  
+  * {
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+  
+  .pace-diff {
+    font-weight: bold;
+    color: #d33 !important;
+  }
+  
+  .result-grid div {
+    text-align: left !important;
+  }
+}

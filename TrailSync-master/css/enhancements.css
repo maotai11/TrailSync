@@ -1,0 +1,107 @@
+/* Add styles for the hidden PNG exporter and updated interval results */
+
+.card-exporter-hidden {
+    position: absolute;
+    left: -9999px; /* Hide it off-screen */
+    top: -9999px;
+    padding: 2rem;
+    background-color: var(--color-background);
+}
+
+#card-exporter-content {
+    width: 400px; /* Portrait width */
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+}
+
+#interval-results-list .metric-item:not(:last-child) {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Enhancements for Shoe Tracker */
+
+.shoe-list-pane {
+    grid-area: results; /* Re-using grid area */
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.shoe-card {
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.shoe-card:hover {
+    border-color: var(--color-text);
+}
+
+.shoe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.shoe-name {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.shoe-brand {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+}
+
+.shoe-delete-btn {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+.shoe-delete-btn:hover {
+    color: var(--color-accent);
+}
+
+.mileage-bar-container {
+    background-color: var(--color-border);
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.mileage-bar {
+    background-color: var(--color-accent);
+    height: 100%;
+    width: 0%; /* Default width */
+    transition: width 0.5s ease;
+}
+
+.mileage-text {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.form-section-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.alt-layout .shoe-list-pane {
+    grid-area: history; /* Match history layout */
+}

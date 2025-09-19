@@ -1,0 +1,43 @@
+/* assets/fonts/fonts.css */
+/* 思源黑體 (Source Han Sans) - 簡化版引用 */
+@font-face {
+  font-family: 'Source Han Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Han Sans Normal'),
+       local('SourceHanSans-Normal'),
+       url('source-han-sans-normal.woff2') format('woff2'),
+       url('source-han-sans-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Source Han Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Han Sans Regular'),
+       local('SourceHanSans-Regular'),
+       url('source-han-sans-regular.woff2') format('woff2'),
+       url('source-han-sans-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Source Han Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Han Sans Bold'),
+       local('SourceHanSans-Bold'),
+       url('source-han-sans-bold.woff2') format('woff2'),
+       url('source-han-sans-bold.woff') format('woff');
+}
+
+/* 設置全局字型 */
+body {
+  font-family: 'Source Han Sans', 'Noto Sans', 'Microsoft JhengHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 為色盲友善設計調整字型粗細 */
+.risk-low, .risk-moderate, .risk-high, .risk-critical {
+  font-weight: 600;
+}
