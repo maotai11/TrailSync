@@ -1,7 +1,8 @@
 import { hmsToHours, calculateEquivalentPace, getTrainingPaces, paceToMinutesPerKm, minutesPerKmToHoursPerKm } from '../core/calculator.js';
 
 export class TrainingPaceCalculator {
-    constructor() {
+    constructor(notifier) {
+        this.notifier = notifier;
         this.cacheDOMElements();
         this.addEventListeners();
         this.init();
@@ -39,17 +40,22 @@ export class TrainingPaceCalculator {
 
         // Result elements
         this.basePaceOutput = document.getElementById('tpc-base-pace');
+        this.basePaceOutputCompact = document.getElementById('tpc-base-pace-compact');
         
         // Interval results
         this.intervalDistInput = document.getElementById('tpc-interval-dist');
         this.intervalRepsInput = document.getElementById('tpc-interval-reps');
         this.intervalPaceOutput = document.getElementById('tpc-interval-pace');
+        this.intervalPaceOutputCompact = document.getElementById('tpc-interval-pace-compact');
         this.intervalRecoveryOutput = document.getElementById('tpc-interval-recovery');
+        this.intervalRecoveryOutputCompact = document.getElementById('tpc-interval-recovery-compact');
 
         // LSD results
         this.lsdDistInput = document.getElementById('tpc-lsd-dist');
         this.lsdPaceOutput = document.getElementById('tpc-lsd-pace');
+        this.lsdPaceOutputCompact = document.getElementById('tpc-lsd-pace-compact');
         this.lsdRecoveryOutput = document.getElementById('tpc-lsd-recovery');
+        this.lsdRecoveryOutputCompact = document.getElementById('tpc-lsd-recovery-compact');
 
         // Copy button
         this.copyBtn = document.getElementById('copy-tpc-results');
@@ -64,10 +70,10 @@ export class TrainingPaceCalculator {
         this.intervalDistInput.addEventListener('input', () => this.calculateAndDisplay());
         this.lsdDistInput.addEventListener('input', () => this.calculateAndDisplay());
 
-        if(this.copyBtn) this.copyBtn.addEventListener('click', () => this.copyResults());
+        if(this.copyBtn) this.copyBtn.addEventListener('click', (e) => this.copyResults(e.currentTarget));
     }
 
-    copyResults() {
+    copyResults(button) {
         if (this.basePaceOutput.textContent === '0:00/km') {
             alert('沒有結果可以複製。');
             return;
@@ -90,7 +96,11 @@ export class TrainingPaceCalculator {
         `.trim().replace(/^ +/gm, ''); // trim and remove leading spaces
 
         navigator.clipboard.writeText(textToCopy).then(() => {
-            alert('結果已複製到剪貼簿！');
+            if (this.notifier) {
+                this.notifier(button);
+            } else {
+                alert('結果已複製到剪貼簿！');
+            }
         }).catch(err => {
             console.error('無法複製文字: ', err);
             alert('複製失敗，請檢查瀏覽器權限。');
@@ -147,13 +157,18 @@ export class TrainingPaceCalculator {
         const trainingPaces = getTrainingPaces(basePace, intervalDistance, lsdDistance);
 
         this.basePaceOutput.textContent = paceToMinutesPerKm(basePace);
+        this.basePaceOutputCompact.textContent = paceToMinutesPerKm(basePace);
         
         // Interval pace doesn't depend on interval distance, but the display might in future
         this.intervalPaceOutput.textContent = paceToMinutesPerKm(trainingPaces.interval);
+        this.intervalPaceOutputCompact.textContent = paceToMinutesPerKm(trainingPaces.interval);
         this.intervalRecoveryOutput.textContent = paceToMinutesPerKm(trainingPaces.recovery);
+        this.intervalRecoveryOutputCompact.textContent = paceToMinutesPerKm(trainingPaces.recovery);
 
         // LSD pace doesn't depend on LSD distance
         this.lsdPaceOutput.textContent = paceToMinutesPerKm(trainingPaces.lsd);
+        this.lsdPaceOutputCompact.textContent = paceToMinutesPerKm(trainingPaces.lsd);
         this.lsdRecoveryOutput.textContent = paceToMinutesPerKm(trainingPaces.recovery); // Often same recovery pace
+        this.lsdRecoveryOutputCompact.textContent = paceToMinutesPerKm(trainingPaces.recovery);
     }
 }

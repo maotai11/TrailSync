@@ -3,7 +3,8 @@ import { hmsToHours } from '../core/calculator.js';
 import { generateWorkout } from '../core/training-planner.js';
 
 export class TrainingPlanUI {
-    constructor() {
+    constructor(notifier) {
+        this.notifier = notifier;
         this.cacheDOMElements();
         if (this.generateBtn) { // Only add listeners if the element exists
             this.addEventListeners();
@@ -46,10 +47,16 @@ export class TrainingPlanUI {
         // Result Display
         this.resWarmup = document.getElementById('plan-res-warmup');
         this.resWarmupPace = document.getElementById('plan-res-warmup-pace');
+        this.resWarmupCompact = document.getElementById('plan-res-warmup-compact');
+        this.resWarmupPaceCompact = document.getElementById('plan-res-warmup-pace-compact');
         this.resMainTitle = document.getElementById('plan-res-main-title');
         this.resMainPace = document.getElementById('plan-res-main-pace');
+        this.resMainCompact = document.getElementById('plan-res-main-compact');
+        this.resMainPaceCompact = document.getElementById('plan-res-main-pace-compact');
         this.resCooldown = document.getElementById('plan-res-cooldown');
         this.resCooldownPace = document.getElementById('plan-res-cooldown-pace');
+        this.resCooldownCompact = document.getElementById('plan-res-cooldown-compact');
+        this.resCooldownPaceCompact = document.getElementById('plan-res-cooldown-pace-compact');
 
         // Copy Button
         this.copyBtn = document.getElementById('copy-plan-results');
@@ -61,10 +68,10 @@ export class TrainingPlanUI {
         this.warmupTimeBtn.addEventListener('click', () => this.toggleWarmupInput('time'));
         this.warmupDistBtn.addEventListener('click', () => this.toggleWarmupInput('dist'));
         this.generateBtn.addEventListener('click', () => this.calculateAndDisplay());
-        if(this.copyBtn) this.copyBtn.addEventListener('click', () => this.copyResults());
+        if(this.copyBtn) this.copyBtn.addEventListener('click', (e) => this.copyResults(e.currentTarget));
     }
 
-    copyResults() {
+    copyResults(button) {
         if (this.resWarmup.textContent === '--') {
             alert('沒有課表可以複製。');
             return;
@@ -84,7 +91,11 @@ TrailSync 課表建議：
         `.trim().replace(/^ +/gm, '');
 
         navigator.clipboard.writeText(textToCopy).then(() => {
-            alert('課表已複製到剪貼簿！');
+            if (this.notifier) {
+                this.notifier(button);
+            } else {
+                alert('課表已複製到剪貼簿！');
+            }
         }).catch(err => {
             console.error('無法複製文字: ', err);
             alert('複製失敗，請檢查瀏覽器權限。');
@@ -158,16 +169,22 @@ TrailSync 課表建議：
 
         // 5. Display Results
         this.resWarmup.textContent = workoutPlan.warmup.text;
+        this.resWarmupCompact.textContent = workoutPlan.warmup.text;
         let warmupPaceText = `配速: ${workoutPlan.warmup.pace}`;
         if(workoutPlan.warmup.strides){
             warmupPaceText += ` + ${workoutPlan.warmup.strides}`;
         }
         this.resWarmupPace.textContent = warmupPaceText;
+        this.resWarmupPaceCompact.textContent = workoutPlan.warmup.pace;
 
         this.resMainTitle.textContent = `${workoutPlan.main.type}: ${workoutPlan.main.details}`;
+        this.resMainCompact.textContent = `${workoutPlan.main.type}: ${workoutPlan.main.details}`;
         this.resMainPace.textContent = `配速: ${workoutPlan.main.pace}`;
+        this.resMainPaceCompact.textContent = workoutPlan.main.pace;
 
         this.resCooldown.textContent = workoutPlan.cooldown.text;
+        this.resCooldownCompact.textContent = workoutPlan.cooldown.text;
         this.resCooldownPace.textContent = `配速: ${workoutPlan.cooldown.pace}`;
+        this.resCooldownPaceCompact.textContent = workoutPlan.cooldown.pace;
     }
 }

@@ -7,7 +7,16 @@ import { exportElementAsPng } from './ui/png-generator.js';
 import { getShoes, addShoe, updateShoeMileage, deleteShoe } from './ui/shoe-manager.js';
 import { saveDebrief, getDebriefs, clearDebriefs, deleteDebrief, updateDebrief } from './ui/debrief-manager.js';
 import { TrainingPaceCalculator } from './ui/training-pace-calculator.js';
-import { TrainingPlanUI } from './ui/training-plan-ui.js';
+import { Router } from './ui/router.js';
+function onSafe(target, event, handler, options) {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!el) {
+        console.warn('[bind-skip]', event, target);
+        return;
+    }
+    el.addEventListener(event, handler, options);
+}
+
 
 function convertTreadmillToPace(speed, incline) {
     if (speed <= 0) return 0;
@@ -32,7 +41,7 @@ class TrailSyncApp {
         this.intervalSetCounter = 0;
         this.initializeDebriefCalendar();
         this.trainingPaceCalculator = new TrainingPaceCalculator();
-        this.trainingPlanUI = new TrainingPlanUI(); // Initialize new UI module
+        this.router = new Router();
     }
 
     cacheDOMElements() {
@@ -72,7 +81,6 @@ class TrailSyncApp {
         this.intervalTargetPaceMin = document.getElementById('interval-target-pace-min');
         this.intervalTargetPaceSec = document.getElementById('interval-target-pace-sec');
         this.intervalPaceReps = document.getElementById('interval-pace-reps');
-        this.copyIntervalBtn = document.getElementById('copy-interval-results');
 
         this.gapPaceInput = document.getElementById('gap-pace');
         this.gapGradeInput = document.getElementById('gap-grade');
@@ -136,68 +144,71 @@ class TrailSyncApp {
     }
 
     addEventListeners() {
-        this.calculateBtn.addEventListener('click', () => this.handleCalculation());
-        this.intervalCalculateBtn.addEventListener('click', () => this.handleIntervalCalculation());
-        this.gapCalculateBtn.addEventListener('click', () => this.handleGapCalculation());
-        this.treadmillConvertBtn.addEventListener('click', () => this.handleTreadmillConversion());
-        this.racePredictBtn.addEventListener('click', () => this.handleRacePrediction());
-        this.saveTrainingBtn.addEventListener('click', () => this.saveCurrentTraining());
-        this.clearHistoryBtn.addEventListener('click', () => this.clearHistory());
-        this.exportCardBtn.addEventListener('click', () => this.handleExportCard());
-        this.addShoeBtn.addEventListener('click', () => this.handleAddShoe());
-        this.debriefSubmitBtn.addEventListener('click', () => this.handleDebriefSubmit());
-        this.addIntervalSetBtn.addEventListener('click', () => this.addIntervalSetRow());
-        this.clearIntervalSetsBtn.addEventListener('click', () => this.clearIntervalSets());
-        this.reverseTreadmillConvertBtn.addEventListener('click', () => this.handleReverseTreadmillConversion());
-        this.calculateTrainingTimeBtn.addEventListener('click', () => this.handleTrainingTimeCalculation());
-
-        if(this.copyIntervalBtn) this.copyIntervalBtn.addEventListener('click', () => this.handleCopyIntervalResults());
-
-        // Advanced Prediction Listeners
-        this.addAidStationBtn.addEventListener('click', () => this.handleAddAidStation());
-
-        // Interval mode switching
-        this.intervalModeTimeBtn.addEventListener('click', () => this.switchIntervalMode('time'));
-        this.intervalModePaceBtn.addEventListener('click', () => this.switchIntervalMode('pace'));
-
-        this.shoeListContainer.addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('shoe-delete-btn')) {
-                const shoeId = e.target.dataset.id;
-                this.handleDeleteShoe(shoeId);
-            }
-            if (e.target && e.target.classList.contains('shoe-add-mileage-btn')) {
-                const shoeId = e.target.dataset.id;
-                this.handleAddMileage(shoeId);
-            }
-            if (e.target && e.target.classList.contains('shoe-edit-btn')) {
-                const shoeId = e.target.dataset.id;
-                this.handleEditShoe(shoeId);
-            }
-        });
-
-        this.debriefCalendarContainer.addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('debrief-delete-btn')) {
-                const debriefId = e.target.dataset.id;
-                this.handleDeleteDebrief(debriefId);
-            }
-            if (e.target && e.target.classList.contains('debrief-edit-btn')) {
-                const debriefId = e.target.dataset.id;
-                this.handleEditDebrief(debriefId);
-            }
-        });
+        onSafe(this.calculateBtn, 'click', () => this.handleCalculation());
+        onSafe(this.intervalCalculateBtn, 'click', () => this.handleIntervalCalculation());
+        onSafe(this.gapCalculateBtn, 'click', () => this.handleGapCalculation());
+        onSafe(this.treadmillConvertBtn, 'click', () => this.handleTreadmillConversion());
+        onSafe(this.racePredictBtn, 'click', () => this.handleRacePrediction());
+        onSafe(this.saveTrainingBtn, 'click', () => this.saveCurrentTraining());
+        onSafe(this.clearHistoryBtn, 'click', () => this.clearHistory());
+        onSafe(this.exportCardBtn, 'click', () => this.handleExportCard());
+        onSafe(this.addShoeBtn, 'click', () => this.handleAddShoe());
+        onSafe(this.debriefSubmitBtn, 'click', () => this.handleDebriefSubmit());
+        onSafe(this.addIntervalSetBtn, 'click', () => this.addIntervalSetRow());
+        onSafe(this.clearIntervalSetsBtn, 'click', () => this.clearIntervalSets());
+        onSafe(this.reverseTreadmillConvertBtn, 'click', () => this.handleReverseTreadmillConversion());
+        onSafe(this.calculateTrainingTimeBtn, 'click', () => this.handleTrainingTimeCalculation());
+        onSafe(this.addAidStationBtn, 'click', () => this.handleAddAidStation());
+        onSafe(this.intervalModeTimeBtn, 'click', () => this.switchIntervalMode('time'));
+        onSafe(this.intervalModePaceBtn, 'click', () => this.switchIntervalMode('pace'));
+        if (this.shoeListContainer) {
+            this.shoeListContainer.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('shoe-delete-btn')) {
+                    const shoeId = e.target.dataset.id;
+                    this.handleDeleteShoe(shoeId);
+                }
+                if (e.target && e.target.classList.contains('shoe-add-mileage-btn')) {
+                    const shoeId = e.target.dataset.id;
+                    this.handleAddMileage(shoeId);
+                }
+                if (e.target && e.target.classList.contains('shoe-edit-btn')) {
+                    const shoeId = e.target.dataset.id;
+                    this.handleEditShoe(shoeId);
+                }
+            });
+        }
+        if (this.debriefCalendarContainer) {
+            this.debriefCalendarContainer.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('debrief-delete-btn')) {
+                    const debriefId = e.target.dataset.id;
+                    this.handleDeleteDebrief(debriefId);
+                }
+                if (e.target && e.target.classList.contains('debrief-edit-btn')) {
+                    const debriefId = e.target.dataset.id;
+                    this.handleEditDebrief(debriefId);
+                }
+            });
+        }
     }
 
     switchIntervalMode(mode) {
+        const timeBtn = this.intervalModeTimeBtn;
+        const paceBtn = this.intervalModePaceBtn;
+        const timeInputs = this.intervalTimeInputs;
+        const paceInputs = this.intervalPaceInputs;
+        if (!timeBtn || !paceBtn || !timeInputs || !paceInputs) {
+            return;
+        }
         if (mode === 'time') {
-            this.intervalModeTimeBtn.classList.add('active');
-            this.intervalModePaceBtn.classList.remove('active');
-            this.intervalTimeInputs.style.display = 'block';
-            this.intervalPaceInputs.style.display = 'none';
+            timeBtn.classList.add('active');
+            paceBtn.classList.remove('active');
+            timeInputs.style.display = 'block';
+            paceInputs.style.display = 'none';
         } else {
-            this.intervalModeTimeBtn.classList.remove('active');
-            this.intervalModePaceBtn.classList.add('active');
-            this.intervalTimeInputs.style.display = 'none';
-            this.intervalPaceInputs.style.display = 'block';
+            timeBtn.classList.remove('active');
+            paceBtn.classList.add('active');
+            timeInputs.style.display = 'none';
+            paceInputs.style.display = 'block';
         }
         this.clearIntervalSets(); // Reset results when switching modes
     }
@@ -227,6 +238,9 @@ class TrailSyncApp {
     }
 
     loadShoes() {
+        if (!this.shoeListContainer || !this.runShoeSelector) {
+            return;
+        }
         const shoes = getShoes();
         this.shoeListContainer.innerHTML = '';
         this.runShoeSelector.innerHTML = '<option value="">不指定</option>';
@@ -274,6 +288,9 @@ class TrailSyncApp {
     }
 
     handleAddShoe() {
+        if (!this.shoeNameInput || !this.shoeBrandInput || !this.shoeMileageInput) {
+            return;
+        }
         const name = this.shoeNameInput.value.trim();
         const brand = this.shoeBrandInput.value.trim();
         const initial = parseFloat(this.shoeMileageInput.value) || 0;
@@ -369,12 +386,20 @@ class TrailSyncApp {
         }
 
         ['raceName', 'date', 'actualTime', 'mentalState', 'nutrition', 'gear']
-            .forEach(k => this[`debrief${k.charAt(0).toUpperCase() + k.slice(1)}Input`].value = '');
+            .forEach(k => {
+                const input = this[`debrief${k.charAt(0).toUpperCase() + k.slice(1)}Input`];
+                if (input) {
+                    input.value = '';
+                }
+            });
         this.loadHistory();
         this.initializeDebriefCalendar();
     }
 
     loadHistory() {
+        if (!this.historyList) {
+            return;
+        }
         this.historyList.innerHTML = '';
         const tHist = getTrainingHistory();
         const dHist = getDebriefs();
@@ -423,6 +448,9 @@ class TrailSyncApp {
     }
 
     addHistoryEntryToDOM(entry) {
+        if (!this.historyList) {
+            return;
+        }
         const empty = this.historyList.querySelector('.history-empty');
         if (empty) empty.remove();
         let html = '';
@@ -457,6 +485,9 @@ class TrailSyncApp {
     }
 
     addIntervalSetRow() {
+        if (!this.intervalSetsContainer) {
+            return;
+        }
         this.intervalSetCounter++;
         const div = document.createElement('div');
         div.className = 'form-group interval-set';
@@ -470,6 +501,9 @@ class TrailSyncApp {
     }
 
     clearIntervalSets() {
+        if (!this.intervalSetsContainer || !this.intervalResultsList || !this.intervalTotalDistanceDisplay || !this.intervalTotalTimeDisplay) {
+            return;
+        }
         this.intervalSetCounter = 0;
         const sets = this.intervalSetsContainer.querySelectorAll('.interval-set');
         sets.forEach((s, i) => { if (i > 0) s.remove(); });
@@ -480,13 +514,17 @@ class TrailSyncApp {
     }
 
     handleIntervalCalculation() {
+        if (!this.intervalDistanceInput || !this.intervalResultsList || !this.intervalSetsContainer || !this.intervalTotalDistanceDisplay || !this.intervalTotalTimeDisplay) {
+            console.warn('Interval calculator missing required elements, aborting.');
+            return;
+        }
         const distance = parseFloat(this.intervalDistanceInput.value) || 0;
         if (distance <= 0) {
             this.intervalResultsList.innerHTML = '<p class="metric-name">請輸入有效的間歇距離</p>';
             return;
         }
 
-        const userTPace = parseFloat(this.userTPaceInput.value) || 0;
+        const userTPace = parseFloat((this.userTPaceInput && this.userTPaceInput.value) || 0) || 0;
         let totalDist = 0, totalSec = 0;
         this.intervalResultsList.innerHTML = '';
 
@@ -523,9 +561,9 @@ class TrailSyncApp {
             });
         } else {
             // New "by pace" logic
-            const paceMin = parseInt(this.intervalTargetPaceMin.value, 10) || 0;
-            const paceSec = parseInt(this.intervalTargetPaceSec.value, 10) || 0;
-            const reps = parseInt(this.intervalPaceReps.value, 10) || 0;
+            const paceMin = parseInt(this.intervalTargetPaceMin ? this.intervalTargetPaceMin.value : 0, 10) || 0;
+            const paceSec = parseInt(this.intervalTargetPaceSec ? this.intervalTargetPaceSec.value : 0, 10) || 0;
+            const reps = parseInt(this.intervalPaceReps ? this.intervalPaceReps.value : 0, 10) || 0;
 
             if (reps <= 0 || (paceMin <= 0 && paceSec <= 0)) {
                 this.intervalResultsList.innerHTML = '<p class="metric-name">請輸入有效的目標配速和次數</p>';
@@ -773,32 +811,6 @@ class TrailSyncApp {
             clearDebriefs();
             this.loadHistory();
         }
-    }
-
-    handleCopyIntervalResults() {
-        const resultsList = this.intervalResultsList;
-        if (resultsList.children.length === 0) {
-            alert('沒有結果可以複製。');
-            return;
-        }
-
-        let textToCopy = '間歇訓練配速解析結果：\n';
-        resultsList.querySelectorAll('.metric-item').forEach(item => {
-            const title = item.querySelector('.metric-name').textContent.trim();
-            const value = item.querySelector('.metric-value').textContent.trim();
-            textToCopy += `- ${title}: ${value}\n`;
-        });
-
-        const totalDist = this.intervalTotalDistanceDisplay.textContent;
-        const totalTime = this.intervalTotalTimeDisplay.textContent;
-        textToCopy += `\n總距離: ${totalDist}\n總時間: ${totalTime}`;
-
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            alert('結果已複製到剪貼簿！');
-        }).catch(err => {
-            console.error('無法複製文字: ', err);
-            alert('複製失敗，請檢查瀏覽器權限。');
-        });
     }
 }
 

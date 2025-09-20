@@ -16,7 +16,7 @@
     <header class="main-header">
         <nav class="main-nav container">
             <a href="#" class="logo">TrailSync</a>
-            <div class="nav-links">
+            <div class="nav-links" id="main-nav-links">
                 <a href="#calculator" class="nav-link">EPH 計算</a>
                 <a href="#interval" class="nav-link">間歇訓練</a>
                 <a href="#training-pace" class="nav-link">訓練配速</a>
@@ -28,6 +28,21 @@
                 <a href="#gear" class="nav-link">我的裝備</a>
                 <a href="#history" class="nav-link">歷史數據</a>
             </div>
+            <div class="nav-actions">
+                <button id="theme-toggle-btn" type="button" class="btn-icon" aria-label="切換深色模式" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <button id="view-desktop-btn" type="button" class="btn-icon view-toggle-btn" aria-label="切換桌面版" title="切換桌面版">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </button>
+                <button id="view-mobile-btn" type="button" class="btn-icon view-toggle-btn" aria-label="切換手機版" title="切換手機版">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>
+                </button>
+                <button id="menu-toggle-btn" type="button" class="btn-icon" aria-label="切換選單" aria-expanded="false" aria-controls="main-nav-links">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
         </nav>
     </header>
 
@@ -38,23 +53,57 @@
             <div class="section-grid">
                 <div class="title-pane"><h2 class="section-title">等效配速<br>計算引擎</h2><p class="section-subtitle">基於距離、爬升與地形的綜合表現評估。</p></div>
                 <div class="form-pane">
-                    <div class="form-group"><label for="route-name" class="form-label">路線名稱 (選填)</label><input type="text" id="route-name" class="form-control" placeholder="例如: 陽明山東段縱走"></div>
-                    <div class="form-group"><label for="distance" class="form-label">距離 (公里)</label><input type="number" id="distance" class="form-control" placeholder="例如: 10.5"></div>
-                    <div class="form-group"><label for="elevation" class="form-label">總爬升 (公尺)</label><input type="number" id="elevation" class="form-control" placeholder="例如: 500"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="route-name" class="form-label">路線名稱 (選填)</label><input type="text" id="route-name" class="form-control" placeholder="例如: 陽明山東段縱走"></div>
+                    </div>
+                    <div class="form-row two-col">
+                        <div class="form-group"><label for="distance" class="form-label">距離 (公里)</label><input type="number" id="distance" class="form-control" placeholder="例如: 10.5"></div>
+                        <div class="form-group"><label for="elevation" class="form-label">總爬升 (公尺)</label><input type="number" id="elevation" class="form-control" placeholder="例如: 500"></div>
+                    </div>
                     <div class="form-group"><label for="target-hours" class="form-label">目標完賽時間</label><div class="time-input-group"><input type="number" id="target-hours" class="form-control time-input" placeholder="時"><input type="number" id="target-minutes" class="form-control time-input" placeholder="分"><input type="number" id="target-seconds" class="form-control time-input" placeholder="秒"></div></div>
-                    <div class="form-group"><label for="route-type" class="form-label">地形複雜度</label><select id="route-type" class="form-control form-select"><option value="road">公路 (平坦)</option><option value="fire_trail" selected>防火道 (一般)</option><option value="technical">技術性路徑</option><option value="alpine">高山地形</option></select></div>
-                    <div class="form-group"><label for="altitude" class="form-label">平均海拔 (公尺)</label><input type="number" id="altitude" class="form-control" placeholder="例如: 1500"></div>
-                    <div class="form-group"><label for="user-t-pace" class="form-label">您的閾值配速 (T-Pace, 分鐘/公里)</label><input type="number" id="user-t-pace" class="form-control" placeholder="例如: 5.0 (5分/公里)"></div>
-                    <div class="form-group"><input type="checkbox" id="ultra-race-checkbox" class="form-control" style="width: auto; margin-right: 0.5rem;"><label for="ultra-race-checkbox" class="form-label" style="display: inline;">超長距離賽事 (啟用非線性疲勞模型)</label></div>
+                    
+                    <div class="advanced-options-wrapper">
+                        <button id="advanced-options-toggle" class="btn btn-outline btn-small" aria-controls="advanced-options-content">進階設定</button>
+                        <div id="advanced-options-content" class="advanced-options-content">
+                            <div class="form-group"><label for="route-type" class="form-label">地形複雜度</label><select id="route-type" class="form-control form-select"><option value="road">公路 (平坦)</option><option value="fire_trail" selected>防火道 (一般)</option><option value="technical">技術性路徑</option><option value="alpine">高山地形</option></select></div>
+                            <div class="form-group"><label for="altitude" class="form-label">平均海拔 (公尺)</label><input type="number" id="altitude" class="form-control" placeholder="例如: 1500"></div>
+                            <div class="form-group"><label for="user-t-pace" class="form-label">您的閾值配速 (T-Pace, 分鐘/公里)</label><input type="number" id="user-t-pace" class="form-control" placeholder="例如: 5.0 (5分/公里)"></div>
+                            <div class="form-group"><input type="checkbox" id="ultra-race-checkbox" class="form-control" style="width: auto; margin-right: 0.5rem;"><label for="ultra-race-checkbox" class="form-label" style="display: inline;">超長距離賽事 (啟用非線性疲勞模型)</label></div>
+                        </div>
+                    </div>
+
                     <button id="calculate-btn" class="btn btn-primary">開始計算</button>
                 </div>
-                <div class="results-pane" id="results-pane-onpage">
-                    <div class="metrics-list">
+                                <div class="results-pane" id="results-pane-onpage" aria-live="polite">
+                    <!-- Existing metrics-list for mobile -->
+                    <div class="metrics-list metrics-list-mobile">
                         <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">距離</h3><p class="metric-value" id="res-distance">0.0 km</p></div></div>
                         <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">總爬升</h3><p class="metric-value" id="res-elevation">0 m</p></div></div>
                         <div class="metric-item"><span class="metric-number">03</span><div class="metric-content"><h3 class="metric-name">用時</h3><p class="metric-value" id="res-time">00:00:00</p></div></div>
                         <div class="metric-item"><span class="metric-number">04</span><div class="metric-content"><h3 class="metric-name" data-tooltip="Equivalent Pace per Hour">EPH</h3><p class="metric-value" id="eph">0.0</p></div></div>
                     </div>
+                    <!-- New compact table for desktop -->
+                    <div class="metrics-table-compact metrics-table-desktop">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>距離</th>
+                                    <th>總爬升</th>
+                                    <th>用時</th>
+                                    <th>EPH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="res-distance-compact">0.0 km</td>
+                                    <td id="res-elevation-compact">0 m</td>
+                                    <td id="res-time-compact">00:00:00</td>
+                                    <td id="eph-compact">0.0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-outline btn-small btn-copy-results" data-target="#results-pane-onpage">複製結果</button>
                 </div>
                 <div class="action-pane">
                     <div class="form-group">
@@ -62,7 +111,6 @@
                         <select id="run-shoe-selector" class="form-control"><option value="">不指定</option></select>
                     </div>
                     <button id="save-training" class="btn btn-outline">儲存紀錄</button>
-                    <button id="export-card-btn" class="btn btn-outline">輸出小卡</button>
                 </div>
             </div>
         </section>
@@ -112,8 +160,21 @@
                     <button id="interval-calculate" class="btn btn-primary">解析間歇訓練</button>
                 </div>
                 <div class="results-pane">
-                    <div id="interval-results-list" class="metrics-list"></div>
-                    <div class="metrics-list" style="margin-top: 20px;">
+                    <div id="interval-results-list-mobile" class="metrics-list metrics-list-mobile" aria-live="polite"></div>
+                    <div id="interval-results-list-desktop" class="metrics-table-compact metrics-table-desktop">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>組別</th>
+                                    <th>配速</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content will go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="metrics-list metrics-list-mobile" style="margin-top: 20px;" aria-live="polite">
                         <div class="metric-item">
                             <span class="metric-number">總</span>
                             <div class="metric-content">
@@ -129,6 +190,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="metrics-table-compact metrics-table-desktop" style="margin-top: 20px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>總距離</th>
+                                    <th>總時間</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="interval-total-distance-compact">0 km</td>
+                                    <td id="interval-total-time-compact">00:00:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <button id="copy-interval-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製結果</button>
                 </div>
             </div>
@@ -143,9 +220,24 @@
                     <div class="form-group"><label for="gap-grade" class="form-label">坡度 (%)</label><input type="number" id="gap-grade" class="form-control" placeholder="例如: 4"></div>
                     <button id="gap-calculate" class="btn btn-primary">計算 GAP</button>
                 </div>
-                <div class="results-pane"><div class="metrics-list">
+                <div class="results-pane"><div class="metrics-list metrics-list-mobile" aria-live="polite">
                     <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name" data-tooltip="Grade Adjusted Pace">等效平路配速 (GAP)</h3><p class="metric-value" id="gap-result">0:00/km</p></div></div>
-                </div></div>
+                </div>
+                <div class="metrics-table-compact metrics-table-desktop">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>等效平路配速 (GAP)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="gap-result-compact">0:00/km</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-outline btn-small btn-copy-results" data-target="#gap .metrics-list-mobile">複製結果</button></div>
             </div>
         </section>
 
@@ -163,10 +255,27 @@
                     <div class="form-group"><label for="reverse-treadmill-incline" class="form-label">跑步機坡度 (%)</label><input type="number" id="reverse-treadmill-incline" class="form-control" placeholder="例如: 1.0"></div>
                     <button id="reverse-treadmill-convert-btn" class="btn btn-primary">換算跑步機速度</button>
                 </div>
-                <div class="results-pane"><div class="metrics-list">
+                <div class="results-pane"><div class="metrics-list metrics-list-mobile" aria-live="polite">
                     <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">等效平路配速</h3><p class="metric-value" id="equivalent-pace">0:00/km</p></div></div>
                     <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">跑步機速度</h3><p class="metric-value" id="treadmill-speed-result">0.0 km/h</p></div></div>
-                </div></div>
+                </div>
+                <div class="metrics-table-compact metrics-table-desktop">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>等效平路配速</th>
+                                <th>跑步機速度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="equivalent-pace-compact">0:00/km</td>
+                                <td id="treadmill-speed-result-compact">0.0 km/h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-outline btn-small btn-copy-results" data-target="#treadmill .metrics-list-mobile">複製結果</button></div>
             </div>
         </section>
 
@@ -218,7 +327,7 @@
                     <button id="tpc-calculate" class="btn btn-primary">計算訓練配速</button>
                 </div>
                 <div class="results-pane">
-                    <div class="metrics-list">
+                    <div class="metrics-list metrics-list-mobile" aria-live="polite">
                         <div class="metric-item">
                             <span class="metric-number">基準</span>
                             <div class="metric-content">
@@ -227,7 +336,21 @@
                             </div>
                         </div>
                     </div>
-                    <div id="tpc-results-content">
+                    <div class="metrics-table-compact metrics-table-desktop">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>基準等效配速</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="tpc-base-pace-compact">0:00/km</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="tpc-results-content" aria-live="polite">
                         <!-- Interval Training -->
                         <h3 class="form-section-title" style="margin-top: 20px;">間歇跑 (Interval)</h3>
                         <div class="form-group-inline">
@@ -241,9 +364,25 @@
                                 <input type="number" id="tpc-interval-reps" class="form-control" placeholder="8">
                             </div>
                         </div>
-                        <div class="metrics-list">
+                        <div class="metrics-list metrics-list-mobile">
                             <div class="metric-item"><div class="metric-content"><h3 class="metric-name">建議配速</h3><p class="metric-value" id="tpc-interval-pace">0:00/km</p></div></div>
                             <div class="metric-item"><div class="metric-content"><h3 class="metric-name">恢復跑 (45min)</h3><p class="metric-value" id="tpc-interval-recovery">0:00/km</p></div></div>
+                        </div>
+                        <div class="metrics-table-compact metrics-table-desktop">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>建議配速</th>
+                                        <th>恢復跑 (45min)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="tpc-interval-pace-compact">0:00/km</td>
+                                        <td id="tpc-interval-recovery-compact">0:00/km</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- LSD Training -->
@@ -253,9 +392,25 @@
                             <input type="number" id="tpc-lsd-dist" class="form-control" list="tpc-lsd-distances" placeholder="21">
                             <datalist id="tpc-lsd-distances"><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option></datalist>
                         </div>
-                        <div class="metrics-list">
+                        <div class="metrics-list metrics-list-mobile">
                             <div class="metric-item"><div class="metric-content"><h3 class="metric-name">建議配速</h3><p class="metric-value" id="tpc-lsd-pace">0:00/km</p></div></div>
                             <div class="metric-item"><div class="metric-content"><h3 class="metric-name">恢復跑 (40min)</h3><p class="metric-value" id="tpc-lsd-recovery">0:00/km</p></div></div>
+                        </div>
+                        <div class="metrics-table-compact metrics-table-desktop">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>建議配速</th>
+                                        <th>恢復跑 (40min)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="tpc-lsd-pace-compact">0:00/km</td>
+                                        <td id="tpc-lsd-recovery-compact">0:00/km</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <button id="copy-tpc-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製結果</button>
@@ -364,9 +519,9 @@
                     <button id="plan-generate-btn" class="btn btn-primary">產生完整課表</button>
                 </div>
                 <div class="results-pane">
-                    <div id="plan-results-content">
+                    <div id="plan-results-content" aria-live="polite">
                         <h3 class="form-section-title">您的專屬課表</h3>
-                        <div class="metrics-list">
+                        <div class="metrics-list metrics-list-mobile">
                             <div class="metric-item">
                                 <span class="metric-number">熱身</span>
                                 <div class="metric-content">
@@ -389,6 +544,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="metrics-table-compact metrics-table-desktop">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>熱身</th>
+                                        <th>主課表</th>
+                                        <th>緩和</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="plan-res-warmup-compact">--</td>
+                                        <td id="plan-res-main-compact">--</td>
+                                        <td id="plan-res-cooldown-compact">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>配速: <span id="plan-res-warmup-pace-compact">--</span></td>
+                                        <td>配速: <span id="plan-res-main-pace-compact">--</span></td>
+                                        <td>配速: <span id="plan-res-cooldown-pace-compact">--</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <button id="copy-plan-results" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">複製課表</button>
                 </div>
@@ -408,10 +586,27 @@
                     <button id="race-predict" class="btn btn-primary">預估完賽時間</button>
                 </div>
                 <div class="results-pane">
-                    <div class="metrics-list">
+                    <div class="metrics-list metrics-list-mobile" aria-live="polite">
                         <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">預估完賽時間</h3><p class="metric-value" id="race-time">00:00:00</p></div></div>
                         <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">賽事等效距離</h3><p class="metric-value" id="race-ep">0 ekm</p></div></div>
                     </div>
+                    <div class="metrics-table-compact metrics-table-desktop">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>預估完賽時間</th>
+                                    <th>賽事等效距離</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="race-time-compact">00:00:00</td>
+                                    <td id="race-ep-compact">0 ekm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-outline btn-small btn-copy-results" data-target="#race .metrics-list-mobile">複製結果</button>
                 </div>
             </div>
 
@@ -456,10 +651,27 @@
                     <button id="calculate-training-time-btn" class="btn btn-primary">計算訓練時間</button>
                 </div>
                 <div class="results-pane">
-                    <div class="metrics-list">
+                    <div class="metrics-list metrics-list-mobile" aria-live="polite">
                         <div class="metric-item"><span class="metric-number">01</span><div class="metric-content"><h3 class="metric-name">預估訓練時間</h3><p class="metric-value" id="training-time-result">00:00:00</p></div></div>
                         <div class="metric-item"><span class="metric-number">02</span><div class="metric-content"><h3 class="metric-name">參考賽事 EPH</h3><p class="metric-value" id="ref-race-eph-result">0.0</p></div></div>
                     </div>
+                    <div class="metrics-table-compact metrics-table-desktop">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>預估訓練時間</th>
+                                    <th>參考賽事 EPH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="training-time-result-compact">00:00:00</td>
+                                    <td id="ref-race-eph-result-compact">0.0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-outline btn-small btn-copy-results" data-target="#calculate-training-time-btn+.results-pane .metrics-list-mobile">複製結果</button>
                 </div>
             </div>
         </section>
@@ -504,7 +716,7 @@
         <section id="history" class="showcase-section alt-layout">
              <div class="section-grid">
                 <div class="title-pane"><h2 class="section-title">歷史數據<br>回放</h2><p class="section-subtitle">回顧您的每一次訓練，追蹤您的持續進步。</p><button id="clear-history" class="btn btn-outline mt-8">全部清除</button></div>
-                <div class="history-pane"><div id="history-list"><div class="history-empty">尚無歷史紀錄</div></div></div>
+                <div class="history-pane"><div id="history-list" aria-live="polite"><div class="history-empty">尚無歷史紀錄</div></div></div>
             </div>
         </section>
 
